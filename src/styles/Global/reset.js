@@ -4,6 +4,7 @@ export const Reset = css`
 
 *{
     box-sizing: border-box;
+	color: #333;
 }
     html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -31,9 +32,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-    margin: 0px auto;
+    margin: 10px auto;
+	border: 3px solid #dbdbdb;
+	border-radius: 10px;
     width: 768px;
-    height: 1024px;
+    height: 1000px;
 	line-height: 1;
 }
 ol, ul {
