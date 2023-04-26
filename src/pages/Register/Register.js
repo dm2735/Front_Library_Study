@@ -4,7 +4,7 @@ import React from 'react';
 import  { useState } from 'react';
 import LoginInput from '../../components/UI/Login/LoginInput/LoginInput';
 import { FiUser, FiLock  } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BiRename } from 'react-icons/bi';
 import axios from 'axios';
 
@@ -71,35 +71,54 @@ const register = css`
     font-weight: 600;
 `;
 
+const errorMsg = css`
+    margin-left: 5px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    color: red;
+`;
+
 const Register = () => {
-    const [registerUser, setRegisterUser] = useState({email:"", password:"", name:""})
+    const navigate = useNavigate();
+
+    const [registerUser, setRegisterUser] = useState({email:"", password:"", name:""});
+    const [errorMessages, setErrorMessages] = useState({email:"", password:"", name:""});
 
     const onChangeHandle = (e) => {
         const { name, value } = e.target;
         setRegisterUser({...registerUser, [name]:value})
     }
 
-const registSubmit = () => {
+//원래 async는 async function regist(){} 이런 형태이다.
+
+const registSubmit = async () => {
     const data = {
         ...registerUser
     }
-    console.log(data)
     const option ={
         headers:{
             "Content-Type": "application/json"
         }
     }
-    axios
-    .post("http://localhost:8080/auth/signup", JSON.stringify(data), option)
-    .then(response=> {
-        console.log("성공")
-        console.log(response);
-    })
-    .catch(error => {
-        console.log("에러")
-        console.log(error.response.data);
-    });
-    console.log("비동기테스트");
+    try{
+        const response = await axios.post("http://localhost:8080/auth/signup", JSON.stringify(data), option);
+        setErrorMessages({email:"", password:"", name:""});
+        alert("회원가입 성공!");
+        navigate("/login");
+        
+    } catch(error){
+        setErrorMessages({email:"", password:"", name:"", ...error.response.data.errorData});
+    }
+    //post는 Promise를 리턴하게 되어있다 
+    //그래서 .then을 사용할 수 있음.
+    // .then(response=> {
+    //     setErrorMessages({email:"", password:"", name:""});
+    //     console.log(response);
+    // })
+    // .catch(error => {
+    //     setErrorMessages({email:"", password:"", name:"", ...error.response.data.errorData});
+    // });
+
 }
     return (
         <div css={container}>
@@ -111,15 +130,20 @@ const registSubmit = () => {
                     <label css={inputLabel}>Email</label>
                     <LoginInput type="email" placeholder="Type your email" onChange={onChangeHandle} name="email">
                         <FiUser/>
-                    </LoginInput>    
+                    </LoginInput>
+                    <div css={errorMsg}>{errorMessages.email}</div>
+
                     <label css={inputLabel}>Password</label> 
                     <LoginInput type="password" placeholder="Type your password" onChange={onChangeHandle} name="password">
                         <FiLock/>
                     </LoginInput>
+                    <div css={errorMsg}>{errorMessages.password}</div>  
+
                     <label css={inputLabel}>Name</label> 
                     <LoginInput type="text" placeholder="Type your name" onChange={onChangeHandle} name="name">
                         <BiRename/>
                     </LoginInput>
+                    <div css={errorMsg}>{errorMessages.name}</div>  
 
                     <button css={loginButton} onClick={registSubmit}>Register</button>             
                 </div>
