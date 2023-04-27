@@ -16,10 +16,10 @@ const cardContainer = css`
     width: 300px;
     max-height: 450px;
     cursor: pointer;
-    &:hover{
+    &:hover {
         box-shadow: 0px 0px 10px #dbdbdb;
     }
-    &:active{
+    &:active {
         background-color: #fafafa;
     }
 `;
@@ -33,14 +33,12 @@ const header = css`
 const titleText = css`
     font-weight: 600;
 `;
-
 const main = css`
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
 `;
-
 const imgBox = css`
     display: flex;
     justify-content: center;
@@ -56,7 +54,6 @@ const imgBox = css`
 const img = css`
     height: 100%;
 `;
-
 const rentalButton = css`
     border: 1px solid #dbdbdb;
     border-radius: 7px;
@@ -66,14 +63,13 @@ const rentalButton = css`
     font-weight: 600;
     box-shadow: 0px 5px 5px #dbdbdb;
     cursor: pointer;
-    &:hover{
+    &:hover {
         background-color: #fafafa;
     }
-    &:active{
+    &:active {
         background-color: #eee;
     }
 `;
-
 const footer = css`
     display: flex;
     flex-direction: column;
@@ -95,7 +91,7 @@ const like = css`
     background-color: white;
     font-weight: 600;
     box-shadow: 0px 5px 5px #dbdbdb;
-`
+`;
 
 const likeIcon = css`
     padding-right: 5px;
@@ -103,14 +99,17 @@ const likeIcon = css`
 
 const BookCard = ({ book }) => {
     const navigate = useNavigate();
+
     const clickHandle = () => {
         navigate("/book/" + book.bookId);
+
+        console.log(book.likeCount)
     }
 
     return (
         <div css={cardContainer} onClick={clickHandle}>
             <header css={header}>
-                <h1 css={titleText}> {book.bookName}</h1>
+                <h1 css={titleText}>{book.bookName}</h1>
             </header>
             <main css={main}>
                 <div css={imgBox}>
@@ -118,10 +117,9 @@ const BookCard = ({ book }) => {
                 </div>
             </main>
             <footer css={footer}>
-                <div css={like}><div css={likeIcon}><AiOutlineLike /></div>추천: 10</div>
-                <h2>{book.authorName}</h2>
-                <h2>{book.publisherName}</h2>
-
+                <div css={like}><div css={likeIcon}><AiOutlineLike /></div>추천: {book.likeCount}</div>
+                <h2>저자명: {book.authorName}</h2>
+                <h2>출판사: {book.publisherName}</h2>
             </footer>
         </div>
     );
